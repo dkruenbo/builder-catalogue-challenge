@@ -112,23 +112,28 @@ curl http://localhost:8000/api/set/by-name/alien-spaceship
 ```
 builder-catalogue-challenge/
 ├── main.py                 # FastAPI application launcher
-├── router.py              # API endpoint definitions
-├── controller.py          # Business logic orchestration
-├── functions.py           # Utility functions and API calls
-├── models.py              # Pydantic data models
+├── app/                    # Application package
+│   ├── router/
+│   │   └── router.py      # API endpoint definitions
+│   ├── controllers/
+│   │   └── controller.py  # Business logic orchestration
+│   ├── functions/
+│   │   └── functions.py   # Utility functions and API calls
+│   └── models/
+│       └── models.py      # Pydantic data models
 ├── requirements.txt       # Python dependencies
 └── README.md             # This file
 ```
 
 ## Architecture
 
-The application follows a clean separation of concerns:
+The application follows a clean, modular architecture organized in an `app` package:
 
 - **`main.py`**: Minimal FastAPI app setup and startup
-- **`router.py`**: HTTP endpoint definitions with proper tags and documentation
-- **`controller.py`**: Business logic that orchestrates functions for complex operations
-- **`functions.py`**: Pure utility functions for API calls and data processing
-- **`models.py`**: Pydantic models for type safety and validation
+- **`app/router/router.py`**: HTTP endpoint definitions with proper tags and documentation
+- **`app/controllers/controller.py`**: Business logic that orchestrates functions for complex operations
+- **`app/functions/functions.py`**: Pure utility functions for API calls and data processing
+- **`app/models/models.py`**: Pydantic models for type safety and validation
 
 ## Example Users
 

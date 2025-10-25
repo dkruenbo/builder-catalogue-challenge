@@ -1,10 +1,10 @@
 from fastapi import APIRouter
-from models import (
+from app.models.models import (
     UserAnalysisResult, UsersResponse, UserSummary, UserFull,
     SetsResponse, SetSummary, SetFull, ColorsResponse
 )
-from controller import analyze_user_builds
-from functions import (
+from app.controllers.controller import analyze_user_builds
+from app.functions.functions import (
     get_all_users, get_user_by_username, get_user_by_id,
     get_all_sets, get_set_by_name, get_set_by_id, get_all_colors
 )

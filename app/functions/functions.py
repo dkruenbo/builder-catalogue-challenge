@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Dict, Tuple
 import httpx
-from models import (
+from app.models.models import (
     UsersResponse, UserSummary, UserFull,
     SetsResponse, SetSummary, SetFull,
     ColorsResponse

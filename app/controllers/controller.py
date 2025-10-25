@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-from models import UserAnalysisResult
-from functions import get_user_inventory, get_all_sets, get_set_requirements, can_build_set, get_all_users
+from app.models.models import UserAnalysisResult
+from app.functions.functions import get_user_inventory, get_all_sets, get_set_requirements, can_build_set, get_all_users
 
 
 async def analyze_user_builds(username: str) -> UserAnalysisResult:
