@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Brick Builder Catalogue{% endblock %}
+
+{% block content %}
+<div class="error">
+    <h2>❌ Oops! Something went wrong</h2>
+    <p><strong>{{ error }}</strong></p>
+    {% if username %}
+    <p>We couldn't analyze the collection for user: <strong>{{ username }}</strong></p>
+    {% endif %}
+    <p>This could happen if:</p>
+    <ul>
+        <li>The username doesn't exist</li>
+        <li>There was a network error</li>
+        <li>The external API is temporarily unavailable</li>
+    </ul>
+</div>
+
+<div style="margin-top: 30px; text-align: center;">
+    <a href="/" style="text-decoration: none;">
+        <button>Try Again</button>
+    </a>
+</div>
+{% endblock %}

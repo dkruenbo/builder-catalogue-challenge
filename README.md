@@ -1,9 +1,10 @@
-# Brick Builder Catalogue API
+# Brick Builder Catalogue
 
-A FastAPI backend application that helps users discover which Brick sets they can build with their existing piece collection. This API provides both direct access to the external brick catalogue and custom business logic for build analysis.
+A FastAPI application with a minimal frontend that helps users discover which Brick sets they can build with their existing piece collection. Features both a simple web interface and comprehensive REST API.
 
 ## Features
 
+- 🌐 **Simple Web Interface**: Clean, minimal frontend for easy user interaction
 - 🔍 **Build Analysis**: Analyze any user's Brick collection to find buildable sets
 - 📊 **Comprehensive Statistics**: Detailed inventory and build success metrics
 - 🧱 **Complete API Coverage**: Full access to users, sets, and colors data
@@ -35,8 +36,21 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The application will be available at:
+- **Web Interface**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
+
+## Usage
+
+### Web Interface
+
+1. Open http://localhost:8000 in your browser
+2. Enter a username (e.g., "arts-n-bricks") or click "Try This User" for available users
+3. Click "Analyze Collection"
+4. View results showing:
+   - Collection statistics (total pieces, unique combinations)
+   - Success rate and buildable set count
+   - List of sets you can build with piece counts
 
 ## API Endpoints
 
@@ -114,26 +128,35 @@ builder-catalogue-challenge/
 ├── main.py                 # FastAPI application launcher
 ├── app/                    # Application package
 │   ├── router/
-│   │   └── router.py      # API endpoint definitions
+│   │   └── router.py      # API endpoints & frontend routes
 │   ├── controllers/
 │   │   └── controller.py  # Business logic orchestration
 │   ├── functions/
 │   │   └── functions.py   # Utility functions and API calls
 │   └── models/
 │       └── models.py      # Pydantic data models
+├── templates/              # Jinja2 HTML templates
+│   ├── base.html          # Base template
+│   ├── index.html         # Home page
+│   ├── results.html       # Analysis results
+│   └── error.html         # Error page
+├── static/
+│   └── style.css          # CSS styling
 ├── requirements.txt       # Python dependencies
 └── README.md             # This file
 ```
 
 ## Architecture
 
-The application follows a clean, modular architecture organized in an `app` package:
+The application follows a clean, modular architecture with both frontend and API:
 
-- **`main.py`**: Minimal FastAPI app setup and startup
-- **`app/router/router.py`**: HTTP endpoint definitions with proper tags and documentation
-- **`app/controllers/controller.py`**: Business logic that orchestrates functions for complex operations
-- **`app/functions/functions.py`**: Pure utility functions for API calls and data processing
-- **`app/models/models.py`**: Pydantic models for type safety and validation
+- **`main.py`**: FastAPI app setup with static file mounting
+- **`app/router/router.py`**: Frontend routes and API endpoint definitions
+- **`app/controllers/controller.py`**: Business logic orchestration
+- **`app/functions/functions.py`**: Pure utility functions for API calls
+- **`app/models/models.py`**: Pydantic models for type safety
+- **`templates/`**: Minimal Jinja2 templates for the web interface
+- **`static/`**: CSS styling for the frontend
 
 ## Example Users
 

@@ -1,0 +1,259 @@
+/* Simple, minimal styling for MVP */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+.search-form {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.results {
+    margin-top: 30px;
+}
+
+.stats {
+    background: #e8f4f8;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.sets-list {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.set-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.set-item:last-child {
+    border-bottom: none;
+}
+
+.clickable-set {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.clickable-set:hover {
+    background-color: #f8f9fa;
+}
+
+.piece-requirement {
+    border-left: 4px solid #ddd;
+}
+
+.piece-requirement.sufficient {
+    border-left-color: #28a745;
+    background-color: #f8fff8;
+}
+
+.piece-requirement.insufficient {
+    border-left-color: #dc3545;
+    background-color: #fff8f8;
+}
+
+.piece-count {
+    text-align: right;
+    font-size: 0.9em;
+}
+
+.piece-count .needed {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.piece-count .available {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.piece-info-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.piece-image {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+}
+
+.brick-image {
+    max-width: 50px;
+    max-height: 50px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.image-fallback {
+    font-size: 30px;
+    color: #6c757d;
+}
+
+.piece-details {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.set-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.set-details {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.set-pieces {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+.set-pieces.missing {
+    background: #dc3545;
+}
+
+.set-item.buildable {
+    border-left: 3px solid #28a745;
+}
+
+.set-item.unbuildable {
+    border-left: 3px solid #dc3545;
+    background-color: #fff8f8;
+}
+
+.set-item.unbuildable:hover {
+    background-color: #ffebeb;
+}
+
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.success {
+    background: #d4edda;
+    color: #155724;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .search-form {
+        padding: 20px;
+    }
+    
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+}

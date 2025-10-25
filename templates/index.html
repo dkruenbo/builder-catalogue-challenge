@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="search-form">
+    <h2>Analyze Your Collection</h2>
+    <form method="post" action="/analyze">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username (e.g., arts-n-bricks)" required>
+        </div>
+        <button type="submit">Analyze Collection</button>
+    </form>
+</div>
+
+{% if users %}
+<div class="available-users">
+    <h3>Available Users ({{ users|length }} total)</h3>
+    <div class="sets-list">
+        {% for user in users[:5] %}
+        <div class="set-item">
+            <div>
+                <div class="set-name">{{ user.username }}</div>
+                <div class="set-details">{{ user.location }} • {{ user.brickCount }} pieces</div>
+            </div>
+            <button onclick="fillUsername('{{ user.username }}')" style="width: auto; padding: 6px 12px; font-size: 14px;">Try This User</button>
+        </div>
+        {% endfor %}
+        {% if users|length > 5 %}
+        <div class="set-item" style="text-align: center; color: #666;">
+            ... and {{ users|length - 5 }} more users
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error">
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function fillUsername(username) {
+    document.getElementById('username').value = username;
+}
+</script>
+{% endblock %}

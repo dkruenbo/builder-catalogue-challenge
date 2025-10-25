@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}{{ results.username }} - Build Analysis{% endblock %}
+
+{% block content %}
+<div class="results">
+    <h2>Build Analysis for {{ results.username }}</h2>
+    
+    <div class="stats">
+        <h3>Collection Statistics</h3>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-value">{{ results.total_pieces }}</div>
+                <div class="stat-label">Total Pieces</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ results.unique_combinations }}</div>
+                <div class="stat-label">Unique Combinations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ results.buildable_count }}</div>
+                <div class="stat-label">Buildable Sets</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ results.unbuildable_count }}</div>
+                <div class="stat-label">Missing Pieces</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.1f"|format((results.buildable_count / results.total_sets * 100)) }}%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if results.buildable_sets %}
+    <div class="buildable-sets">
+        <h3>✅ You Can Build These Sets ({{ results.buildable_count }})</h3>
+        <div class="sets-list">
+            {% for set in results.buildable_sets %}
+            <a href="/set/{{ set.id }}/build/{{ results.username }}" style="text-decoration: none; color: inherit;">
+                <div class="set-item clickable-set buildable">
+                    <div>
+                        <div class="set-name">{{ set.name }}</div>
+                        <div class="set-details">Set #{{ set.set_number }} • Click to view build details</div>
+                    </div>
+                    <div class="set-pieces">{{ set.pieces }} pieces</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if results.unbuildable_sets %}
+    <div class="unbuildable-sets" style="margin-top: 30px;">
+        <h3>❌ Sets You Can't Build ({{ results.unbuildable_count }})</h3>
+        <p style="color: #666; margin-bottom: 20px;">Click any set to see what pieces you're missing</p>
+        <div class="sets-list">
+            {% for set in results.unbuildable_sets %}
+            <a href="/set/{{ set.id }}/build/{{ results.username }}" style="text-decoration: none; color: inherit;">
+                <div class="set-item clickable-set unbuildable">
+                    <div>
+                        <div class="set-name">{{ set.name }}</div>
+                        <div class="set-details">Set #{{ set.set_number }} • Click to see missing pieces</div>
+                    </div>
+                    <div class="set-pieces missing">{{ set.pieces }} pieces</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if not results.buildable_sets and not results.unbuildable_sets %}
+    <div class="error">
+        <strong>No buildable sets found!</strong><br>
+        Unfortunately, {{ results.username }} doesn't have enough pieces to build any of the {{ results.total_sets }} available sets.
+    </div>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="/" style="text-decoration: none;">
+            <button>Analyze Another User</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

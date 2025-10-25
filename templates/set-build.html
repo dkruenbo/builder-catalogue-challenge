@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ set_info.name }} - Build Requirements{% endblock %}
+
+{% block content %}
+<div class="results">
+    <div style="margin-bottom: 20px;">
+        <a href="javascript:history.back()" style="text-decoration: none; color: #007bff;">
+            ← Back to Analysis
+        </a>
+    </div>
+    
+    <h2>🧱 {{ set_info.name }}</h2>
+    
+    <div class="stats">
+        <h3>Set Information</h3>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-value">{{ set_info.setNumber }}</div>
+                <div class="stat-label">Set Number</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ set_info.totalPieces }}</div>
+                <div class="stat-label">Total Pieces</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ requirements|length }}</div>
+                <div class="stat-label">Unique Parts</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ username }}</div>
+                <div class="stat-label">Building For</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="buildable-sets">
+        <h3>Required Pieces</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">🧱 = picture not available</p>
+        <div class="sets-list">
+            {% for req in requirements %}
+            <div class="set-item piece-requirement {{ 'sufficient' if req.user_has >= req.needed else 'insufficient' }}">
+                <div class="piece-info-container">
+                    <div class="piece-image">
+                        <img src="https://img.bricklink.com/P/{{ req.color_id }}/{{ req.piece_id }}.jpg" 
+                             alt="Brick piece {{ req.piece_id }}" 
+                             class="brick-image"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <span class="image-fallback" style="display: none;">🧱</span>
+                    </div>
+                    <div class="piece-text">
+                        <strong>Piece ID:</strong> {{ req.piece_id }}<br>
+                        <strong>Color:</strong> {{ req.color_name or req.color_id }}
+                    </div>
+                    <div class="piece-count">
+                        <div class="needed">Need: {{ req.needed }}</div>
+                        <div class="available">Have: {{ req.user_has }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% if can_build %}
+    <div class="success">
+        <h3>🎉 Ready to Build!</h3>
+        <p>{{ username }} has all the required pieces to build this set!</p>
+    </div>
+    {% else %}
+    <div class="error">
+        <h3>🔧 Missing Pieces</h3>
+        <p>{{ username }} is missing some pieces needed to build this set. The red items above show what's needed.</p>
+        <p><strong>Missing:</strong> {{ missing_piece_types }} different piece types ({{ total_missing_pieces }} total pieces)</p>
+    </div>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="javascript:history.back()" style="text-decoration: none;">
+            <button>Back to Analysis</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

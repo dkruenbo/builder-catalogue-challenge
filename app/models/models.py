@@ -76,6 +76,7 @@ class ColorsResponse(BaseModel):
 
 # Analysis result models
 class BuildableSet(BaseModel):
+    id: str
     name: str
     pieces: int
     set_number: str
@@ -88,3 +89,5 @@ class UserAnalysisResult(BaseModel):
     total_sets: int
     buildable_sets: List[BuildableSet]
     buildable_count: int
+    unbuildable_sets: List[BuildableSet]
+    unbuildable_count: int
