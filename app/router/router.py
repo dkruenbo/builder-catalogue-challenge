@@ -3,9 +3,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.models.models import (
     UserAnalysisResult, UsersResponse, UserSummary, UserFull,
-    SetsResponse, SetSummary, SetFull, ColorsResponse
+    SetsResponse, SetSummary, SetFull, ColorsResponse, CollaborationResult
 )
-from app.controllers.controller import analyze_user_builds, analyze_set_build
+from app.controllers.controller import analyze_user_builds, analyze_set_build, find_collaboration_partners
 from app.functions.functions import (
     get_all_users, get_user_by_username, get_user_by_id,
     get_all_sets, get_set_by_name, get_set_by_id, get_all_colors
@@ -70,6 +70,23 @@ async def view_set_build(request: Request, set_id: str, username: str):
         })
 
 
+@router.get("/set/{set_id}/collaborate/{username}", response_class=HTMLResponse, tags=["frontend"])
+async def view_collaboration_options(request: Request, set_id: str, username: str):
+    """View collaboration options for building a specific set"""
+    try:
+        collaboration_data = await find_collaboration_partners(username, set_id)
+        return templates.TemplateResponse("collaborate.html", {
+            "request": request,
+            **collaboration_data.dict()
+        })
+    except HTTPException as e:
+        return templates.TemplateResponse("error.html", {
+            "request": request,
+            "error": e.detail,
+            "username": username
+        })
+
+
 # =============================================================================
 # Default API Endpoints - Direct mirror of external API
 # =============================================================================
@@ -124,3 +141,9 @@ async def api_all_colours():
 async def api_user_builds(username: str):
     """Analyze which sets a user can build with their inventory"""
     return await analyze_user_builds(username)
+
+
+@router.get("/api/set/{set_id}/collaborate/{username}", response_model=CollaborationResult, tags=["brick-builder-catalogue"])
+async def api_collaboration_partners(set_id: str, username: str, max_collaborators: int = 3):
+    """Find collaboration partners for building a specific set"""
+    return await find_collaboration_partners(username, set_id, max_collaborators)

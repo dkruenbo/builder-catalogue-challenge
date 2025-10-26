@@ -5,8 +5,8 @@
 {% block content %}
 <div class="results">
     <div style="margin-bottom: 20px;">
-        <a href="javascript:history.back()" style="text-decoration: none; color: #007bff;">
-            ← Back to Analysis
+        <a href="/" style="text-decoration: none; color: #007bff;">
+            ← Back to Home
         </a>
     </div>
     
@@ -29,7 +29,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-value">{{ username }}</div>
-                <div class="stat-label">Building For</div>
+                <div class="stat-label">User</div>
             </div>
         </div>
     </div>
@@ -40,19 +40,23 @@
         <div class="sets-list">
             {% for req in requirements %}
             <div class="set-item piece-requirement {{ 'sufficient' if req.user_has >= req.needed else 'insufficient' }}">
-                <div class="piece-info-container">
-                    <div class="piece-image">
-                        <img src="https://img.bricklink.com/P/{{ req.color_id }}/{{ req.piece_id }}.jpg" 
-                             alt="Brick piece {{ req.piece_id }}" 
-                             class="brick-image"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <span class="image-fallback" style="display: none;">🧱</span>
+                <div class="piece-info-container" style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div class="piece-image">
+                            <img src="https://img.bricklink.com/P/{{ req.color_id }}/{{ req.piece_id }}.jpg" 
+                                 alt="Brick piece {{ req.piece_id }}" 
+                                 class="brick-image"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <span class="image-fallback" style="display: none;">🧱</span>
+                        </div>
+                        <div class="piece-details">
+                            <div class="piece-text">
+                                <strong>Piece ID:</strong> {{ req.piece_id }}<br>
+                                <strong>Color:</strong> {{ req.color_name or req.color_id }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="piece-text">
-                        <strong>Piece ID:</strong> {{ req.piece_id }}<br>
-                        <strong>Color:</strong> {{ req.color_name or req.color_id }}
-                    </div>
-                    <div class="piece-count">
+                    <div class="piece-count" style="text-align: right; flex-shrink: 0; min-width: 120px;">
                         <div class="needed">Need: {{ req.needed }}</div>
                         <div class="available">Have: {{ req.user_has }}</div>
                     </div>
@@ -64,7 +68,7 @@
     
     {% if can_build %}
     <div class="success">
-        <h3>🎉 Ready to Build!</h3>
+        <h3>Ready to Build!</h3>
         <p>{{ username }} has all the required pieces to build this set!</p>
     </div>
     {% else %}
@@ -72,12 +76,18 @@
         <h3>🔧 Missing Pieces</h3>
         <p>{{ username }} is missing some pieces needed to build this set. The red items above show what's needed.</p>
         <p><strong>Missing:</strong> {{ missing_piece_types }} different piece types ({{ total_missing_pieces }} total pieces)</p>
+        
+        <div style="margin-top: 20px;">
+            <a href="/set/{{ set_info.id }}/collaborate/{{ username }}" style="text-decoration: none;">
+                <button style="background: #28a745; margin-right: 10px;">🤝 Find Collaboration Partners</button>
+            </a>
+        </div>
     </div>
     {% endif %}
     
     <div style="margin-top: 30px; text-align: center;">
-        <a href="javascript:history.back()" style="text-decoration: none;">
-            <button>Back to Analysis</button>
+        <a href="/" style="text-decoration: none;">
+            <button>Back to Home</button>
         </a>
     </div>
 </div>

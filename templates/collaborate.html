@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Collaboration Partners - {{ set_info.name }}{% endblock %}
+
+{% block content %}
+<div class="results">
+    <div style="margin-bottom: 20px;">
+        <a href="/set/{{ set_info.id }}/build/{{ original_username }}" style="text-decoration: none; color: #007bff;">
+            ← Back to Build Analysis
+        </a>
+    </div>
+    
+    <h2>🤝 Collaboration Partners for {{ set_info.name }}</h2>
+    
+    <div class="stats">
+        <h3>Collaboration Summary</h3>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-value">{{ original_username }}</div>
+                <div class="stat-label">Original Builder</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ missing_piece_types }}</div>
+                <div class="stat-label">Missing Piece Types</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ total_missing_pieces }}</div>
+                <div class="stat-label">Total Missing Pieces</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ collaboration_options|length }}</div>
+                <div class="stat-label">Options Found</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if no_collaboration_found %}
+    <div class="error">
+        <h3>🚫 No Collaboration Options Found</h3>
+        <p>Unfortunately, no combination of available users can help complete this set.</p>
+        <p>This might mean:</p>
+        <ul>
+            <li>The missing pieces are very rare in the current user base</li>
+            <li>Other users don't have the specific pieces needed</li>
+            <li>The set requires pieces that aren't currently available</li>
+        </ul>
+    </div>
+    {% else %}
+    <div class="buildable-sets">
+        <h3>Collaboration Options</h3>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+            These are combinations of users who together can provide all missing pieces:
+        </p>
+        
+        <div class="collaboration-list">
+            {% for option in collaboration_options %}
+            <div class="collaboration-card">
+                <div class="card-header">
+                    <h4 class="team-title">
+                        {% if option.success_rate == 100.0 %}
+                            ✅ Complete Solution - {{ option.total_users }} Person Team
+                        {% else %}
+                            📊 Partial Solution ({{ "%.0f"|format(option.success_rate) }}%) - {{ option.total_users }} Person Team
+                        {% endif %}
+                    </h4>
+                    <p class="team-summary">{{ option.missing_pieces_filled }} pieces contributed by {% if option.total_users == 2 %}1 collaborator{% else %}{{ option.total_users - 1 }} collaborators{% endif %}</p>
+                </div>
+                
+                <div class="team-members">
+                    <!-- Original user -->
+                    <div class="member-card you-card">
+                        <div class="member-info">
+                            <span class="member-name">{{ original_username }}</span>
+                            <span class="member-role">(You - Project Leader)</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Collaborators -->
+                    {% for collaborator in option.collaborators %}
+                    <div class="member-card">
+                        <div class="member-info">
+                            <span class="member-name">{{ collaborator.username }}</span>
+                        </div>
+                        <div class="contribution">
+                            <span class="contribution-count">{{ collaborator.pieces_contributed }} pieces</span>
+                            <div class="piece-list">
+                                {% for piece in collaborator.missing_pieces_filled[:3] %}
+                                    {{ piece.quantity }}× #{{ piece.piece_id }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                                {% if collaborator.missing_pieces_filled|length > 3 %}
+                                    + {{ collaborator.missing_pieces_filled|length - 3 }} more
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="/set/{{ set_info.id }}/build/{{ original_username }}" style="text-decoration: none; margin-right: 10px;">
+            <button>Back to Build: {{ set_info.name }}</button>
+        </a>
+        <a href="/" style="text-decoration: none;">
+            <button style="background: #6c757d;">Back to beginning</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

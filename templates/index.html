@@ -8,31 +8,20 @@
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" placeholder="Enter your username (e.g., arts-n-bricks)" required>
         </div>
+        {% if users %}
+        <div class="form-group">
+            <label for="user-select">Or choose from available users:</label>
+            <select id="user-select" onchange="fillFromDropdown()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 16px; box-sizing: border-box; background: white;">
+                <option value="">Select a user...</option>
+                {% for user in users %}
+                <option value="{{ user.username }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
         <button type="submit">Analyze Collection</button>
     </form>
 </div>
-
-{% if users %}
-<div class="available-users">
-    <h3>Available Users ({{ users|length }} total)</h3>
-    <div class="sets-list">
-        {% for user in users[:5] %}
-        <div class="set-item">
-            <div>
-                <div class="set-name">{{ user.username }}</div>
-                <div class="set-details">{{ user.location }} • {{ user.brickCount }} pieces</div>
-            </div>
-            <button onclick="fillUsername('{{ user.username }}')" style="width: auto; padding: 6px 12px; font-size: 14px;">Try This User</button>
-        </div>
-        {% endfor %}
-        {% if users|length > 5 %}
-        <div class="set-item" style="text-align: center; color: #666;">
-            ... and {{ users|length - 5 }} more users
-        </div>
-        {% endif %}
-    </div>
-</div>
-{% endif %}
 
 {% if error %}
 <div class="error">
@@ -45,6 +34,14 @@
 <script>
 function fillUsername(username) {
     document.getElementById('username').value = username;
+}
+
+function fillFromDropdown() {
+    const dropdown = document.getElementById('user-select');
+    const username = dropdown.value;
+    if (username) {
+        document.getElementById('username').value = username;
+    }
 }
 </script>
 {% endblock %}

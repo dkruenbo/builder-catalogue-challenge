@@ -14,20 +14,8 @@
                 <div class="stat-label">Total Pieces</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">{{ results.unique_combinations }}</div>
-                <div class="stat-label">Unique Combinations</div>
-            </div>
-            <div class="stat-item">
                 <div class="stat-value">{{ results.buildable_count }}</div>
                 <div class="stat-label">Buildable Sets</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{ results.unbuildable_count }}</div>
-                <div class="stat-label">Missing Pieces</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{ "%.1f"|format((results.buildable_count / results.total_sets * 100)) }}%</div>
-                <div class="stat-label">Success Rate</div>
             </div>
         </div>
     </div>
