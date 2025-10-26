@@ -118,5 +118,7 @@ class CollaborationResult(BaseModel): # Result of collaboration analysis
     set_info: dict
     total_missing_pieces: int
     missing_piece_types: int
+    original_user_pieces_provided: List[dict]
+    original_user_total_contribution: int
     collaboration_options: List[CollaborationOption]
     no_collaboration_found: bool

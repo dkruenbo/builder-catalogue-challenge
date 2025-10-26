@@ -311,13 +311,22 @@ button:hover {
 }
 
 .member-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: block !important;
     padding: 15px;
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 8px;
+}
+
+.member-card .member-info {
+    display: block !important;
+    margin-bottom: 10px;
+}
+
+.member-card .contribution {
+    display: block !important;
+    text-align: left !important;
+    width: 100% !important;
 }
 
 .member-card.you-card {
@@ -350,11 +359,11 @@ button:hover {
 }
 
 .contribution {
-    text-align: right;
+    text-align: left;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .contribution-count {
@@ -366,8 +375,26 @@ button:hover {
 .piece-list {
     font-size: 0.85em;
     color: #666;
-    max-width: 200px;
-    text-align: right;
+    max-width: 100%;
+    text-align: left;
+    width: 100%;
+}
+
+.piece-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
+    gap: 5px !important;
+    margin-bottom: 10px !important;
+}
+
+.grid-piece-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 3px !important;
+    background: #f8fff8 !important;
+    border-radius: 3px !important;
+    font-size: 0.75em !important;
 }
 
 @media (max-width: 768px) {

@@ -125,7 +125,7 @@ async def get_sets_list():
     return sets_response.Sets
 
 
-def calculate_user_contribution(user, user_inventory, missing_pieces):
+def calculate_user_contribution(user, user_inventory, missing_pieces, color_lookup=None):
     """Calculate what pieces a user can contribute toward missing requirements"""
     pieces_contributed = 0
     missing_pieces_filled = []
@@ -140,6 +140,7 @@ def calculate_user_contribution(user, user_inventory, missing_pieces):
             missing_pieces_filled.append({
                 'piece_id': piece_id,
                 'color_id': color_id,
+                'color_name': color_lookup.get(color_id, None) if color_lookup else None,
                 'quantity': contribution
             })
     

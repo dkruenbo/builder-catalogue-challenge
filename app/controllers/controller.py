@@ -113,9 +113,17 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
         set_info = await get_set_by_id(set_id)
         requirements_dict, _ = await get_set_requirements(set_id)
         
+        # Get color names for display
+        colors_response = await get_all_colors()
+        color_lookup = {str(color.code): color.name for color in colors_response.colours}
+        
         # Calculate what pieces the original user is missing
         missing_pieces = {}
         total_missing_pieces = 0
+        
+        # Also calculate what pieces the original user IS providing
+        original_user_pieces_provided = []
+        total_pieces_provided = 0
         
         for (piece_id, color_id), needed in requirements_dict.items():
             user_has = original_inventory.get((piece_id, color_id), 0)
@@ -123,6 +131,25 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
                 missing = needed - user_has
                 missing_pieces[(piece_id, color_id)] = missing
                 total_missing_pieces += missing
+                
+                # If user has some but not enough, count what they do have
+                if user_has > 0:
+                    original_user_pieces_provided.append({
+                        'piece_id': piece_id,
+                        'color_id': color_id,
+                        'color_name': color_lookup.get(color_id, None),
+                        'quantity': user_has
+                    })
+                    total_pieces_provided += user_has
+            else:
+                # User has enough or more than needed - count what's actually used
+                original_user_pieces_provided.append({
+                    'piece_id': piece_id,
+                    'color_id': color_id,
+                    'color_name': color_lookup.get(color_id, None),
+                    'quantity': needed
+                })
+                total_pieces_provided += needed
         
         # If user can already build alone, no collaboration needed
         if not missing_pieces:
@@ -131,6 +158,8 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
                 set_info=set_info.dict(),
                 total_missing_pieces=0,
                 missing_piece_types=0,
+                original_user_pieces_provided=original_user_pieces_provided,
+                original_user_total_contribution=total_pieces_provided,
                 collaboration_options=[],
                 no_collaboration_found=False
             )
@@ -145,7 +174,7 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
         for user in potential_collaborators:
             try:
                 user_inventory = await get_user_inventory(user.username)
-                contribution = calculate_user_contribution(user, user_inventory, missing_pieces)
+                contribution = calculate_user_contribution(user, user_inventory, missing_pieces, color_lookup)
                 
                 if contribution['pieces_contributed'] > 0:
                     # Check if this single collaboration completes the set
@@ -184,8 +213,8 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
                     user1_inventory = await get_user_inventory(user1.username)
                     user2_inventory = await get_user_inventory(user2.username)
                     
-                    contribution1 = calculate_user_contribution(user1, user1_inventory, missing_pieces)
-                    contribution2 = calculate_user_contribution(user2, user2_inventory, missing_pieces)
+                    contribution1 = calculate_user_contribution(user1, user1_inventory, missing_pieces, color_lookup)
+                    contribution2 = calculate_user_contribution(user2, user2_inventory, missing_pieces, color_lookup)
                     
                     # Check if combined they can complete the set
                     remaining_missing = {}
@@ -221,6 +250,8 @@ async def find_collaboration_partners(original_username: str, set_id: str, max_c
             set_info=set_info.dict(),
             total_missing_pieces=total_missing_pieces,
             missing_piece_types=len(missing_pieces),
+            original_user_pieces_provided=original_user_pieces_provided,
+            original_user_total_contribution=total_pieces_provided,
             collaboration_options=collaboration_options,
             no_collaboration_found=len(collaboration_options) == 0
         )

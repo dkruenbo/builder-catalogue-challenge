@@ -58,7 +58,8 @@
                 <div class="card-header">
                     <h4 class="team-title">
                         {% if option.success_rate == 100.0 %}
-                            ✅ Complete Solution - {{ option.total_users }} Person Team
+                            ✅ Complete Solution - {{ option.total_users }} Person Team<br> 
+                            Collaborators: {{ original_username }}{% for c in option.collaborators %}, {{ c.username }}{% endfor %}
                         {% else %}
                             📊 Partial Solution ({{ "%.0f"|format(option.success_rate) }}%) - {{ option.total_users }} Person Team
                         {% endif %}
@@ -70,8 +71,61 @@
                     <!-- Original user -->
                     <div class="member-card you-card">
                         <div class="member-info">
+                            <span class="member-role"><strong>You - Project Leader:</strong> <br></span>
                             <span class="member-name">{{ original_username }}</span>
-                            <span class="member-role">(You - Project Leader)</span>
+                        </div>
+                        <div class="contribution" style="width: 100%; margin-top: 10px;">
+                            <span class="contribution-count">Contributing: {{ original_user_total_contribution }} pieces</span>
+                            <div class="piece-list" style="margin-top: 10px;">
+                                <div class="piece-preview">
+                                    <div class="piece-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px; margin-bottom: 10px;">
+                                        {% for piece in original_user_pieces_provided[:6] %}
+                                            <div class="grid-piece-item" style="display: flex; align-items: center; gap: 5px; padding: 3px; background: #f8fff8; border-radius: 3px; font-size: 0.75em;">
+                                                <div class="mini-piece-image" style="width: 24px; height: 24px; flex-shrink: 0;">
+                                                    <img src="https://img.bricklink.com/P/{{ piece.color_id }}/{{ piece.piece_id }}.jpg" 
+                                                         alt="{{ piece.piece_id }}" 
+                                                         style="width: 24px; height: 24px; object-fit: contain; border-radius: 2px;"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                    <span style="display: none; font-size: 12px;">🧱</span>
+                                                </div>
+                                                <div class="mini-piece-info" style="flex: 1; min-width: 0;">
+                                                    <div style="font-weight: bold;">{{ piece.quantity }}×</div>
+                                                    <div style="color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">#{{ piece.piece_id }}</div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if original_user_pieces_provided|length > 6 %}
+                                        <button class="expand-btn" onclick="togglePieceList(this)" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 0.85em; padding: 5px 0;">
+                                            ▼ Show {{ original_user_pieces_provided|length - 6 }} more pieces
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                {% if original_user_pieces_provided|length > 6 %}
+                                <div class="piece-full" style="display: none; margin-top: 5px; padding-top: 5px; border-top: 1px solid #eee;">
+                                    <div class="piece-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px; margin-bottom: 10px;">
+                                        {% for piece in original_user_pieces_provided %}
+                                            <div class="grid-piece-item" style="display: flex; align-items: center; gap: 5px; padding: 3px; background: #f8fff8; border-radius: 3px; font-size: 0.75em;">
+                                                <div class="mini-piece-image" style="width: 24px; height: 24px; flex-shrink: 0;">
+                                                    <img src="https://img.bricklink.com/P/{{ piece.color_id }}/{{ piece.piece_id }}.jpg" 
+                                                         alt="{{ piece.piece_id }}" 
+                                                         style="width: 24px; height: 24px; object-fit: contain; border-radius: 2px;"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                    <span style="display: none; font-size: 12px;">🧱</span>
+                                                </div>
+                                                <div class="mini-piece-info" style="flex: 1; min-width: 0;">
+                                                    <div style="font-weight: bold;">{{ piece.quantity }}×</div>
+                                                    <div style="color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">#{{ piece.piece_id }}</div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <button class="collapse-btn" onclick="togglePieceList(this)" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 0.85em; padding: 5px 0;">
+                                        ▲ Show less
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     
@@ -79,16 +133,59 @@
                     {% for collaborator in option.collaborators %}
                     <div class="member-card">
                         <div class="member-info">
+                            <span class="member-role"><strong>Collaborator:</strong></span><br>
                             <span class="member-name">{{ collaborator.username }}</span>
                         </div>
-                        <div class="contribution">
-                            <span class="contribution-count">{{ collaborator.pieces_contributed }} pieces</span>
-                            <div class="piece-list">
-                                {% for piece in collaborator.missing_pieces_filled[:3] %}
-                                    {{ piece.quantity }}× #{{ piece.piece_id }}{% if not loop.last %}, {% endif %}
-                                {% endfor %}
-                                {% if collaborator.missing_pieces_filled|length > 3 %}
-                                    + {{ collaborator.missing_pieces_filled|length - 3 }} more
+                        <div class="contribution" style="width: 100%; margin-top: 10px;">
+                            <span class="contribution-count">Contributing: {{ collaborator.pieces_contributed }} pieces</span>
+                            <div class="piece-list" style="margin-top: 10px;">
+                                <div class="piece-preview">
+                                    <div class="piece-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px; margin-bottom: 10px;">
+                                        {% for piece in collaborator.missing_pieces_filled[:6] %}
+                                            <div class="grid-piece-item" style="display: flex; align-items: center; gap: 5px; padding: 3px; background: #f8fff8; border-radius: 3px; font-size: 0.75em;">
+                                                <div class="mini-piece-image" style="width: 24px; height: 24px; flex-shrink: 0;">
+                                                    <img src="https://img.bricklink.com/P/{{ piece.color_id }}/{{ piece.piece_id }}.jpg" 
+                                                         alt="{{ piece.piece_id }}" 
+                                                         style="width: 24px; height: 24px; object-fit: contain; border-radius: 2px;"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                    <span style="display: none; font-size: 12px;">🧱</span>
+                                                </div>
+                                                <div class="mini-piece-info" style="flex: 1; min-width: 0;">
+                                                    <div style="font-weight: bold;">{{ piece.quantity }}×</div>
+                                                    <div style="color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">#{{ piece.piece_id }}</div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if collaborator.missing_pieces_filled|length > 6 %}
+                                        <button class="expand-btn" onclick="togglePieceList(this)" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 0.85em; padding: 5px 0;">
+                                            ▼ Show {{ collaborator.missing_pieces_filled|length - 6 }} more pieces
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                {% if collaborator.missing_pieces_filled|length > 6 %}
+                                <div class="piece-full" style="display: none; margin-top: 5px; padding-top: 5px; border-top: 1px solid #eee;">
+                                    <div class="piece-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px; margin-bottom: 10px;">
+                                        {% for piece in collaborator.missing_pieces_filled %}
+                                            <div class="grid-piece-item" style="display: flex; align-items: center; gap: 5px; padding: 3px; background: #f8fff8; border-radius: 3px; font-size: 0.75em;">
+                                                <div class="mini-piece-image" style="width: 24px; height: 24px; flex-shrink: 0;">
+                                                    <img src="https://img.bricklink.com/P/{{ piece.color_id }}/{{ piece.piece_id }}.jpg" 
+                                                         alt="{{ piece.piece_id }}" 
+                                                         style="width: 24px; height: 24px; object-fit: contain; border-radius: 2px;"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                    <span style="display: none; font-size: 12px;">🧱</span>
+                                                </div>
+                                                <div class="mini-piece-info" style="flex: 1; min-width: 0;">
+                                                    <div style="font-weight: bold;">{{ piece.quantity }}×</div>
+                                                    <div style="color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">#{{ piece.piece_id }}</div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <button class="collapse-btn" onclick="togglePieceList(this)" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 0.85em; padding: 5px 0;">
+                                        ▲ Show less
+                                    </button>
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -110,4 +207,20 @@
         </a>
     </div>
 </div>
+
+<script>
+function togglePieceList(button) {
+    const pieceList = button.closest('.piece-list');
+    const preview = pieceList.querySelector('.piece-preview');
+    const full = pieceList.querySelector('.piece-full');
+    
+    if (full.style.display === 'none') {
+        preview.style.display = 'none';
+        full.style.display = 'block';
+    } else {
+        preview.style.display = 'block';
+        full.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}
