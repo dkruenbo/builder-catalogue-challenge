@@ -34,8 +34,9 @@ class UserFull(BaseModel):  # Complete user info with full collection
 class UsersResponse(BaseModel): # Response model for all users
     Users: List[UserSummary]
 
-
+# =============================================================================
 # Set-related models
+# =============================================================================
 class SetSummary(BaseModel): # Basic set info
     id: str
     name: str
@@ -65,8 +66,9 @@ class SetFull(BaseModel): # Full set info including pieces
 class SetsResponse(BaseModel): # Response model for all sets
     Sets: List[SetSummary]
 
-
+# =============================================================================
 # Color-related models
+# =============================================================================
 class Color(BaseModel): # A color entry
     name: str
     code: int
@@ -76,8 +78,9 @@ class ColorsResponse(BaseModel): # Response model for all colors
     colours: List[Color]
     disclaimer: str
 
-
+# =============================================================================
 # Analysis result models
+# =============================================================================
 class BuildableSet(BaseModel): # A set that can be built
     id: str
     name: str
@@ -95,8 +98,9 @@ class UserAnalysisResult(BaseModel): # Analysis result for a user's buildable se
     unbuildable_sets: List[BuildableSet]
     unbuildable_count: int
 
-
+# =============================================================================
 # Collaboration models
+# =============================================================================
 class UserContribution(BaseModel): # A user's contribution to filling missing pieces
     username: str
     user_id: str

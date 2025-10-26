@@ -44,8 +44,9 @@ async def get_user_by_id(user_id: str) -> UserFull:
     response_data = await get_json(f"{API_BASE}/api/user/by-id/{user_id}")
     return UserFull(**response_data)
 
-
+# =============================================================================
 # Set-related functions
+# =============================================================================
 async def get_all_sets() -> SetsResponse:
     """Get all available brick sets"""
     response_data = await get_json(f"{API_BASE}/api/sets")
@@ -63,15 +64,17 @@ async def get_set_by_id(set_id: str) -> SetFull:
     response_data = await get_json(f"{API_BASE}/api/set/by-id/{set_id}")
     return SetFull(**response_data)
 
-
+# =============================================================================
 # Color-related functions
+# =============================================================================
 async def get_all_colors() -> ColorsResponse:
     """Get all available colors"""
     response_data = await get_json(f"{API_BASE}/api/colours")
     return ColorsResponse(**response_data)
 
-
+# =============================================================================
 # Utility functions for analysis
+# =============================================================================
 async def get_user_inventory(username: str) -> Dict[Tuple[str, str], int]:
     """Convert user's collection into a searchable inventory dict"""
     # Get user summary then full details
